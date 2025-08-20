@@ -46,7 +46,13 @@ window.addEventListener("keyup", (e) => {
 
 // Отрисовка игрока
 function drawPlayer() {
-  ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+  if (playerImg.complete) {
+    ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+  } else {
+    // Резервный вариант - зеленый квадрат
+    ctx.fillStyle = "#00ff00";
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+  }
 }
 
 // Движение игрока
@@ -77,7 +83,14 @@ function shoot() {
 function drawBullets() {
   bullets.forEach((bullet, index) => {
     bullet.y -= bullet.speed;
-    ctx.drawImage(bulletImg, bullet.x, bullet.y, bullet.width, bullet.height);
+    
+    if (bulletImg.complete) {
+      ctx.drawImage(bulletImg, bullet.x, bullet.y, bullet.width, bullet.height);
+    } else {
+      // Резервный вариант - желтый квадрат
+      ctx.fillStyle = "#ffff00";
+      ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    }
 
     // Удаляем пулю, если вышла за экран
     if (bullet.y < 0) {
@@ -103,7 +116,14 @@ function spawnEnemy() {
 function drawEnemies() {
   enemies.forEach((enemy, index) => {
     enemy.y += enemy.speed;
-    ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+    
+    if (enemyImg.complete) {
+      ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+    } else {
+      // Резервный вариант - красный квадрат
+      ctx.fillStyle = "#ff0000";
+      ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    }
 
     // Удаляем врага, если вышел за экран
     if (enemy.y > canvas.height) {
@@ -170,7 +190,16 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-// Начинаем игру, когда изображения загружены
-playerImg.onload = () => {
-  gameLoop();
-};
+// Запуск игры - проверяем все изображения
+function startGame() {
+  // Проверяем, загружены ли все изображения
+  if (playerImg.complete && enemyImg.complete && bulletImg.complete) {
+    gameLoop();
+  } else {
+    // Если нет - ждем немного и пробуем снова
+    setTimeout(startGame, 100);
+  }
+}
+
+// Начинаем попытку запуска игры
+startGame();
