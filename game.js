@@ -21,8 +21,7 @@ const player = {
   y: canvas.height - 50,
   width: 30,
   height: 30,
-  speed: 5,
-  color: "#00ff00"
+  speed: 5
 };
 
 // Пули
@@ -30,6 +29,9 @@ let bullets = [];
 
 // Враги
 let enemies = [];
+
+// Счёт
+let score = 0;
 
 // Управление
 let keys = {};
@@ -67,7 +69,6 @@ function shoot() {
     y: player.y,
     width: 5,
     height: 10,
-    color: "#ffff00",
     speed: 7
   });
 }
@@ -93,7 +94,6 @@ function spawnEnemy() {
       y: -30,
       width: 30,
       height: 30,
-      color: "#ff0000",
       speed: 2
     });
   }
